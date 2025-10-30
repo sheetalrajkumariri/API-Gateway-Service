@@ -1,0 +1,30 @@
+server:
+  port: 8083
+
+# Gateway
+spring:
+  application:
+    name: gateway-Service
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true  # ensures URLs work in lowercase
+      routes:
+        - id: Book-Store-Service
+          uri: lb://book-store-service
+          predicates:
+            - Path=/book-store-service/**
+        - id: Review-Service
+          uri: lb://review-service
+          predicates:
+            - Path=/review-service/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
